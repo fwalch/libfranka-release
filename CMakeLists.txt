@@ -83,15 +83,16 @@ target_link_libraries(franka PRIVATE
 )
 
 ## Installation
-include(GNUInstallDirs)
-set(INSTALL_CMAKE_CONFIG_DIR ${CMAKE_INSTALL_LIBDIR}/cmake/Franka)
+find_package(catkin REQUIRED)
+catkin_destinations()
+set(INSTALL_CMAKE_CONFIG_DIR ${CATKIN_PACKAGE_LIB_DESTINATION}/cmake/Franka)
 
 install(TARGETS franka
   EXPORT FrankaTargets
-  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
-install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+install(DIRECTORY include/ DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION})
 
 export(EXPORT FrankaTargets
   NAMESPACE Franka::
@@ -118,7 +119,7 @@ install(EXPORT FrankaTargets
 )
 
 # Install catkin package.xml
-install(FILES package.xml DESTINATION share/libfranka)
+install(FILES package.xml DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
 
 ## Subprojects
 
