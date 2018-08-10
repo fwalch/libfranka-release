@@ -1,0 +1,63 @@
+From 1926a08f93497eb8461c59824121b073ecdb4a37 Mon Sep 17 00:00:00 2001
+From: Florian Walch <florian.walch@franka.de>
+Date: Fri, 10 Aug 2018 15:04:18 +0200
+Subject: [PATCH 2/2] Install into catkin destinations
+
+---
+ CMakeLists.txt          | 13 +++++++------
+ examples/CMakeLists.txt |  5 ++---
+ 2 files changed, 9 insertions(+), 9 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index f3dc28d..1382f62 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -83,15 +83,16 @@ target_link_libraries(franka PRIVATE
+ )
+ 
+ ## Installation
+-include(GNUInstallDirs)
+-set(INSTALL_CMAKE_CONFIG_DIR ${CMAKE_INSTALL_LIBDIR}/cmake/Franka)
++find_package(catkin REQUIRED)
++catkin_destinations()
++set(INSTALL_CMAKE_CONFIG_DIR ${CATKIN_PACKAGE_LIB_DESTINATION}/cmake/Franka)
+ 
+ install(TARGETS franka
+   EXPORT FrankaTargets
+-  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+-  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
++  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
++  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+ )
+-install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
++install(DIRECTORY include/ DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION})
+ 
+ export(EXPORT FrankaTargets
+   NAMESPACE Franka::
+@@ -118,7 +119,7 @@ install(EXPORT FrankaTargets
+ )
+ 
+ # Install catkin package.xml
+-install(FILES package.xml DESTINATION share/libfranka)
++install(FILES package.xml DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
+ 
+ ## Subprojects
+ 
+diff --git a/examples/CMakeLists.txt b/examples/CMakeLists.txt
+index 2bd2282..99f0109 100644
+--- a/examples/CMakeLists.txt
++++ b/examples/CMakeLists.txt
+@@ -46,8 +46,7 @@ endforeach()
+ target_link_libraries(joint_impedance_control Threads::Threads)
+ target_link_libraries(motion_with_control Poco::Foundation)
+ 
+-include(GNUInstallDirs)
+ install(TARGETS ${EXAMPLES}
+-  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+-  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
++  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
++  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+ )
+-- 
+2.7.4
+
